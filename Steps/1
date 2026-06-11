@@ -1,0 +1,94 @@
+STEP 1 — Create AWS Foundation
+
+Do only this step first.
+
+1. Create AWS Account
+
+If not already done:
+
+Create AWS account
+Enable MFA on root account
+
+2. Create IAM Admin User
+
+AWS Console
+
+IAM
+ → Users
+ → Create User
+
+Create:
+
+streamvault-admin
+
+Attach:
+
+AdministratorAccess
+
+Login using this user from now on.
+
+Never use root account.
+
+3. Create Budget Alert
+Billing
+ → Budgets
+
+Create:
+
+Monthly Budget = $10
+
+Email notifications:
+
+80%
+100%
+
+This prevents accidental charges.
+
+4. Choose AWS Region
+
+Use:
+
+ap-south-1 (Mumbai)
+
+Keep every service in this region.
+
+5. Create GitHub Repository
+
+Create:
+
+streamvault
+
+Push:
+
+Clo/
+
+into GitHub.
+
+6. Verify Project Runs Locally
+
+Inside:
+
+cd streamvault
+
+npm install
+
+npm run dev
+
+Open:
+
+http://localhost:3000
+
+Confirm:
+
+Login page works
+Register page works
+No Prisma errors
+Stop Here
+
+Once you've completed Step 1 and confirmed:
+
+AWS account ready
+IAM user created
+Budget configured
+GitHub repo created
+Next.js app runs locally
