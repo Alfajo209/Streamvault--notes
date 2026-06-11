@@ -1,0 +1,170 @@
+Step 2 — Create AWS Networking Foundation
+
+This step creates the network where all your services will run.
+
+Architecture
+Internet
+    │
+Route 53
+    │
+Load Balancer
+    │
+────────────────────
+Public Subnets
+────────────────────
+    │
+NAT Gateway
+    │
+────────────────────
+Private Subnets
+────────────────────
+    │
+EKS / EC2
+RDS
+Lambda
+2.1 Create VPC
+
+AWS Console → VPC → Create VPC
+
+Configure:
+
+Name: streamvault-vpc
+IPv4 CIDR: 10.0.0.0/16
+Tenancy: Default
+
+Create VPC.
+
+2.2 Create Public Subnet A
+
+VPC → Subnets → Create Subnet
+
+Name: public-subnet-a
+AZ: ap-south-1a
+CIDR: 10.0.1.0/24
+
+Enable:
+
+Auto Assign Public IP = Enabled
+2.3 Create Public Subnet B
+Name: public-subnet-b
+AZ: ap-south-1b
+CIDR: 10.0.2.0/24
+
+Enable Auto Assign Public IP.
+
+2.4 Create Private Subnet A
+Name: private-subnet-a
+AZ: ap-south-1a
+CIDR: 10.0.10.0/24
+2.5 Create Private Subnet B
+Name: private-subnet-b
+AZ: ap-south-1b
+CIDR: 10.0.20.0/24
+2.6 Create Internet Gateway
+
+VPC → Internet Gateways
+
+Create:
+
+streamvault-igw
+
+Attach it to:
+
+streamvault-vpc
+2.7 Create Public Route Table
+
+VPC → Route Tables
+
+Create:
+
+streamvault-public-rt
+
+Add route:
+
+Destination: 0.0.0.0/0
+Target: Internet Gateway
+
+Associate:
+
+public-subnet-a
+public-subnet-b
+2.8 Create NAT Gateway
+
+VPC → NAT Gateway
+
+Create inside:
+
+public-subnet-a
+
+Allocate Elastic IP.
+
+Name:
+
+streamvault-nat
+
+Wait until status becomes:
+
+Available
+2.9 Create Private Route Table
+
+Create:
+
+streamvault-private-rt
+
+Add route:
+
+Destination: 0.0.0.0/0
+Target: NAT Gateway
+
+Associate:
+
+private-subnet-a
+private-subnet-b
+2.10 Create Security Groups
+Application Security Group
+Name:
+streamvault-app-sg
+
+Inbound:
+
+80  TCP  Anywhere
+443 TCP  Anywhere
+22  TCP  My IP
+3000 TCP My IP
+
+Outbound:
+
+All Traffic
+Database Security Group
+Name:
+streamvault-rds-sg
+
+Inbound:
+
+3306 MySQL
+Source = streamvault-app-sg
+
+Outbound:
+
+All Traffic
+Verify Before Continuing
+
+You should now have:
+
+✅ 1 VPC
+
+✅ 2 Public Subnets
+
+✅ 2 Private Subnets
+
+✅ Internet Gateway
+
+✅ NAT Gateway
+
+✅ Public Route Table
+
+✅ Private Route Table
+
+✅ Application Security Group
+
+✅ Database Security Group
