@@ -1,0 +1,173 @@
+Step 3 — Create Storage, Database, and Container Registry
+
+This step prepares the core services your application will use.
+
+3.1 Create S3 Bucket
+
+AWS Console → S3 → Create Bucket
+
+Configuration
+Bucket Name:
+streamvault-media-<unique-id>
+
+Region:
+ap-south-1 (Mumbai)
+
+Block Public Access:
+Keep Enabled
+
+Versioning:
+Enable
+
+Purpose:
+
+Store uploaded videos
+Store logs
+Store backups
+Store disaster recovery snapshots
+3.2 Create RDS MySQL Database
+
+AWS Console → RDS → Create Database
+
+Engine
+MySQL
+Template
+Free Tier
+DB Settings
+DB Instance Identifier:
+streamvault-db
+
+Master Username:
+admin
+
+Choose a strong password and save it safely.
+
+Connectivity
+VPC:
+streamvault-vpc
+
+Subnet Group:
+Private Subnets
+
+Public Access:
+No
+
+Security Group:
+streamvault-rds-sg
+Database Configuration
+Initial Database Name:
+streamvault
+
+Create database.
+
+Wait until status becomes:
+
+Available
+3.3 Save RDS Endpoint
+
+After database creation:
+
+RDS → streamvault-db
+
+Copy:
+
+Endpoint
+Port
+
+Example:
+
+streamvault-db.xxxxx.ap-south-1.rds.amazonaws.com
+3306
+
+You will need this later for Prisma.
+
+3.4 Create ECR Repository
+
+AWS Console → ECR → Create Repository
+
+Create
+Repository Name:
+streamvault
+
+Visibility:
+
+Private
+
+Create repository.
+
+Purpose:
+
+Stores Docker images
+Used by EKS deployments
+3.5 Prepare Environment Variables
+
+Inside your project root:
+
+Create:
+
+.env.production
+
+Example:
+
+DATABASE_URL=mysql://admin:PASSWORD@RDS-ENDPOINT:3306/streamvault
+
+AWS_REGION=ap-south-1
+
+S3_BUCKET=streamvault-media-xxxxx
+
+NEXTAUTH_SECRET=your-secret
+
+NODE_ENV=production
+
+Do not commit this file to GitHub.
+
+Add to .gitignore:
+
+.env
+.env.production
+3.6 Verify Docker Support
+
+From your project root:
+
+docker --version
+
+and
+
+docker compose version
+
+If Docker is not installed:
+
+Install Docker Desktop.
+
+3.7 Create Dockerfile
+
+In project root:
+
+streamvault/
+ ├─ Dockerfile
+
+If you already have one, don't change it yet.
+
+If you don't have one, tell me:
+
+Is your backend Node.js + Express?
+Is it Next.js?
+Are frontend and backend separate folders?
+
+I'll generate the correct Dockerfile.
+
+Stop Here
+
+Complete:
+
+✅ S3 bucket created
+
+✅ RDS MySQL created
+
+✅ RDS endpoint copied
+
+✅ ECR repository created
+
+✅ .env.production prepared
+
+✅ Docker verified
